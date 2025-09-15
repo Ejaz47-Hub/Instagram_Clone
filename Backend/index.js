@@ -2,6 +2,8 @@ import express, { urlencoded } from 'express'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import dotenv from 'dotenv'
+import { connect } from 'mongoose';
+import connectDB from './utils/db.js';
 dotenv.config({});
 
 const app = express()
@@ -22,6 +24,7 @@ const corsOptions = {
 }
 app.use(cors(corsOptions))
 app.listen(process.env.PORT,()=>{
+    connectDB()
     console.log(`Server is listen at port ${PORT}`);
     
 })
