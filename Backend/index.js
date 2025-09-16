@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser'
 import dotenv from 'dotenv'
 import { connect } from 'mongoose';
 import connectDB from './utils/db.js';
+import router from './routes/user.route.js';
 dotenv.config({});
 
 const app = express()
@@ -23,6 +24,9 @@ const corsOptions = {
     credentials:true
 }
 app.use(cors(corsOptions))
+
+app.use("/api/v1/user", router);
+
 app.listen(process.env.PORT,()=>{
     connectDB()
     console.log(`Server is listen at port ${PORT}`);
