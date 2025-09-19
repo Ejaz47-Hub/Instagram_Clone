@@ -5,6 +5,8 @@ import dotenv from 'dotenv'
 import { connect } from 'mongoose';
 import connectDB from './utils/db.js';
 import router from './routes/user.route.js';
+import Postrouter from './routes/post.route.js';
+import messageRouter from './routes/message.route.js';
 dotenv.config({});
 
 const app = express()
@@ -26,6 +28,8 @@ const corsOptions = {
 app.use(cors(corsOptions))
 
 app.use("/api/v1/user", router);
+app.use("/api/v1/post", Postrouter);
+app.use("/api/v1/message", messageRouter);
 
 app.listen(process.env.PORT,()=>{
     connectDB()

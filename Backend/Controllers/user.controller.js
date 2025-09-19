@@ -1,6 +1,7 @@
 import { User } from "../model/user.model.js";
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+import Post from '../model/post.model.js'
 import getDataUri from "../utils/datauri.js";
 import cloudinary from "../utils/cloudinary.js";
 export const register = async(req,res)=>{
@@ -59,18 +60,32 @@ export const login = async(req,res) =>{
             success: false,
         })
     };
-    user = {
+
+    
+    const token = await jwt.sign({ userId: user._id }, process.env.SECRET_KEY, { expiresIn: '1d' });
+    //populate east post if in the posts array
+
+    const populatedPosts = await Promise.all(
+        user.posts.map(async(postId)=>{
+          const post = await Post.findById(postId)
+          if(post.author.equals(user._id)){
+            return post;
+          }
+          return null;
+        })
+    )
+
+    
+        user = {
         _id:user._id,
         username:user.username,
         email : user.email,
         profilePicture : user.profilePicture,
         followers : user.followers,
         following : user.following,
-        posts : user.posts
+        posts : populatedPosts
     }
 
-    
-    const token = await jwt.sign({ userId: user._id }, process.env.SECRET_KEY, { expiresIn: '1d' });
 
     return res.cookie('token',token,{httpOnly:true, sameSite:'strict', maxAge:1*24*60*60*1000}).json({
         message : `Welcome back ${user.username}`,
