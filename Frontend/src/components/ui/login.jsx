@@ -5,9 +5,8 @@ import { Toaster, toast } from "sonner"   // ✅ import toast
 import { Link, useNavigate } from "react-router-dom"
 import { Loader2 } from "lucide-react"
 
-const Signup = () => {
+const Login = () => {
   const [input, setInput] = useState({
-    username: "",
     email: "",
     password: "",
   })
@@ -24,7 +23,7 @@ const Signup = () => {
     try {
       setLoading(true)
       const res = await axios.post(
-        "http://localhost:8000/api/v1/user/register",
+        "http://localhost:8000/api/v1/user/login",
         input,
         {
           headers: {
@@ -35,10 +34,9 @@ const Signup = () => {
       )
 
       if (res.data.success) {
-        navigate('/login')
+        navigate('/')
         toast.success(res.data.message)   // ✅ correct usage
         setInput({
-           username: "",
            email: "",
             password: "",
         });
@@ -61,20 +59,11 @@ const Signup = () => {
         <div className="my-4 text-center">
           <h1 className="text-center font-bold text-xl">LOGO</h1>
           <p className="text-sm text-center">
-            Signup to see photos & videos from friends
+            Login to see photos & videos from friends
           </p>
         </div>
 
-        <div>
-          <span className="font-medium">Username</span>
-          <input
-            type="text"
-            name="username"
-            value={input.username}
-            onChange={changeEventHandler}
-            className="border border-black p-2 rounded w-full my-2"
-          />
-        </div>
+    
 
         <div>
           <span className="font-medium">Email</span>
@@ -97,8 +86,7 @@ const Signup = () => {
             className="border border-black p-2 rounded w-full my-2"
           />
         </div>
-
-         {
+        {
           loading ? (
             <Button variant="outline" className="bg-black text-white" >
               <Loader2 className="mr-2 h-4 m-4 animate-spin"/>
@@ -106,11 +94,12 @@ const Signup = () => {
             </Button>
           ) : (
                <Button variant="outline" className="bg-black text-white" type="submit">
-          Signup
+          LOGIN
         </Button>
           )
         }
-        <span className="text-center">Already have an account? <Link className="text-blue-600" to="/login">Login</Link></span>
+       
+         <span className="text-center">Dosen't have an account? <Link className="text-blue-600" to="/signup">Signup</Link></span>
       </form>
 
       {/* ✅ Mount the Toaster component once in your app */}
@@ -119,4 +108,4 @@ const Signup = () => {
   )
 }
 
-export default Signup
+export default Login
